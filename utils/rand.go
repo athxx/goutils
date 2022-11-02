@@ -8,7 +8,7 @@ import (
 
 const StdLen = 16
 
-// RandString
+// RandString more fast
 func RandString(length int, chars []byte) string {
 	if length == 0 {
 		return ""
@@ -43,22 +43,22 @@ func RandString(length int, chars []byte) string {
 	}
 }
 
-// RandStr 随机程度高
+// RandStr more random
 func RandStr(l int, c ...string) string {
 	var (
-		chars = `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`
-		str   string
+		chars = []byte(`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`)
 		num   *big.Int
+		str   = make([]byte, l)
 	)
 	if len(c) > 0 {
-		chars = c[0]
+		chars = []byte(c[0])
 	}
 	chrLen := int64(len(chars))
 	for len(str) < l {
 		num, _ = crand.Int(crand.Reader, big.NewInt(chrLen))
-		str += string(chars[num.Int64()])
+		str = append(str, chars[num.Int64()])
 	}
-	return str
+	return string(str)
 }
 
 func RandNum(i int) string {
@@ -66,5 +66,5 @@ func RandNum(i int) string {
 }
 
 func RandHexHash(l int) string {
-	return RandString(l, []byte(`0123456789abcdef`))
+	return string(RandStr(l, `0123456789abcdef`))
 }
