@@ -48,7 +48,7 @@ func RandStr(l int, c ...string) string {
 	var (
 		chars = []byte(`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`)
 		num   *big.Int
-		str   = make([]byte, l)
+		str   []byte
 	)
 	if len(c) > 0 {
 		chars = []byte(c[0])
