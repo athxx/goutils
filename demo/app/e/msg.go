@@ -1,6 +1,8 @@
 package e
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 
 	"svr/app/util/logx"
@@ -40,8 +42,15 @@ func OutJsonString(c *gin.Context, data string) {
 	c.Writer.Write([]byte(`{"code": 0,"msg":"ok","data":` + data + `}`))
 }
 
-func OutString(c *gin.Context, data string) {
-	OutBytes(c, []byte(data))
+func OutString(c *gin.Context, data ...string) {
+	str := strings.Builder{}
+	for k, v := range data {
+		if k > 0 {
+			str.WriteString(" ")
+		}
+		str.WriteString(v)
+	}
+	c.Writer.WriteString(str.String())
 }
 
 func OutBytes(c *gin.Context, data []byte) {

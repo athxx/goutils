@@ -3,7 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 )
 
 func JsonMarshal(interface{}) {
@@ -22,7 +22,7 @@ func JsonMinify(data []byte) []byte {
 	if err := json.Compact(buff, data); err != nil {
 		return data
 	}
-	if b, err := ioutil.ReadAll(buff); err == nil {
+	if b, err := io.ReadAll(buff); err == nil {
 		return b
 	}
 	return data

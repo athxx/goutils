@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -209,13 +208,13 @@ func exists(path string) (bool, error) {
 // FileGetContents Get bytes to file.
 // if non-exist, create this file.
 func FileGetContents(filename string) (data []byte, e error) {
-	return ioutil.ReadFile(filename)
+	return os.ReadFile(filename)
 }
 
 // FilePutContents Put bytes to file.
 // if non-exist, create this file.
 func FilePutContents(filename string, content []byte) error {
-	return ioutil.WriteFile(filename, content, os.ModePerm)
+	return os.WriteFile(filename, content, os.ModePerm)
 }
 
 // GobEncode Gob encodes file cache item.

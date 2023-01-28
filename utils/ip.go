@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -16,7 +16,7 @@ func IPClient(req *http.Request) string {
 
 func IPServer() string {
 	resp, _ := http.Get("https://ipw.cn/api/ip/myip")
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	resp.Body.Close()
 	return string(body)
 }

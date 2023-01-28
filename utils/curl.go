@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -72,7 +71,7 @@ func curl(method, router string, body interface{}, header map[string]string) ([]
 	if er != nil {
 		return nil, er
 	}
-	res, err := ioutil.ReadAll(resp.Body)
+	res, err := io.ReadAll(resp.Body)
 	if CurlDebug {
 		blob := SerializeStr(body)
 		if contentType != "application/json" {
@@ -148,7 +147,7 @@ func CurlPostFile(uri string, fields map[string]string, files map[string]string,
 	if err != nil {
 		return nil, err
 	}
-	res, err := ioutil.ReadAll(resp.Body)
+	res, err := io.ReadAll(resp.Body)
 	resp.Body.Close()
 	return res, err
 }

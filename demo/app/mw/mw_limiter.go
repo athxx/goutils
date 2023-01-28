@@ -2,7 +2,7 @@ package mw
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 
 	"github.com/gin-gonic/gin"
 
@@ -26,7 +26,7 @@ func Limiter(c *gin.Context) {
 	num, _ := c.Request.Body.Read(buf)
 	body := buf[:num]
 	// Write body back
-	c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 	Md5 := util.Md5(ip + token + method + host + uri + string(body))
 	if rdx.Exists(Md5) > 0 {
 		c.AbortWithStatusJSON(429, gin.H{

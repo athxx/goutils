@@ -25,6 +25,21 @@ func NewErr(code int, msg string) error {
 	return E{code, msg, stack(3)}
 }
 
+func NewErrf(code int, msg string, args ...interface{}) error {
+	return E{code, fmt.Sprintf(msg, args...), stack(3)}
+}
+
+func HttpCode(code int, msg string) E {
+	v, ok := MsgFlags[code*1000]
+	if msg == "" {
+		msg = v
+	}
+	if ok {
+		return E{code * 1000, msg, stack(3)}
+	}
+	return E{code, msg, stack(3)}
+}
+
 func (e E) Error() string {
 	return e.msg
 }

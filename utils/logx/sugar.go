@@ -39,77 +39,76 @@ func getFields(msg string, format bool, args ...interface{}) (string, []zap.Fiel
 }
 
 func (l *LogX) Debug(s interface{}, args ...interface{}) error {
-	es, e := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.Debug(msg, field...)
 		return errors.New(msg)
 	}
 	return e
 }
 func (l *LogX) Info(s interface{}, args ...interface{}) error {
-	es, e := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.Info(msg, field...)
 	}
 	return e
 }
 func (l *LogX) Warn(s interface{}, args ...interface{}) error {
-	es, e := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.Warn(msg, field...)
 	}
 	return e
 }
 func (l *LogX) Error(s interface{}, args ...interface{}) error {
-	es, e := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.Error(msg, field...)
 	}
 	return e
 }
 func (l *LogX) DPanic(s interface{}, args ...interface{}) {
-	es, _ := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.DPanic(msg, field...)
 	}
 }
 func (l *LogX) Panic(s interface{}, args ...interface{}) {
-	es, _ := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.Panic(msg, field...)
 	}
 }
 func (l *LogX) Fatal(s interface{}, args ...interface{}) {
-	es, _ := checkErr(s)
-	if es != `` {
-		msg, field := getFields(es, false, args...)
+	e := checkErr(s)
+	if e != nil {
+		msg, field := getFields(e.Error(), false, args...)
 		l.logger.Fatal(msg, field...)
 	}
 }
 
-func checkErr(s interface{}) (string, error) {
+func checkErr(s interface{}) error {
 	var msg string
 	switch e := s.(type) {
 	case error:
-		return e.Error(), e
+		return e
 	case string:
-		return e, errors.New(e)
+		return errors.New(e)
 	case []byte:
-		return string(e), nil
+		return errors.New(string(e))
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
 		msg = fmt.Sprintf("%v", e)
-		return msg, errors.New(msg)
+		return errors.New(msg)
 	case nil:
-		return ``, nil
+		return nil
 	default:
-		msg = fmt.Sprintf("%+v", e)
-		return msg, errors.New(msg)
+		return errors.New(fmt.Sprintf("%+v", e))
 	}
 }
 
